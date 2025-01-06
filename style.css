@@ -1,0 +1,35 @@
+h1 {
+    font-family: "Sofia";
+    text-align: center;
+}
+
+#playArea {
+    position: relative;
+    height: 500px;
+    width: 500px;
+    margin: auto;
+    background-color: burlywood;
+}
+
+#snakeHead {
+    position: absolute;
+    height: 10px;
+    width: 10px;
+    top: 245px;
+    left: 245px;
+    background-color: rgb(5, 53, 5);
+    
+}
+
+
+#playArea div {
+    transition: 0.2s;
+}
+
+.apple {
+    position: absolute;
+    height: 10px;
+    width: 10px;
+    background-color: red;
+    border-radius: 50%;
+}
