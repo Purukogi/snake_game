@@ -14,6 +14,7 @@ let speedX = 0;
 let speedY = 0;
 let snakeLength = 3;
 let gameStarted = false;
+let scoreTable = [];
 const shadesOfGreen = ["#1E5631", "#A4DE02", "#76BA1B", "#4C9A2A", "#ACDF87", "#68BB59"];
 
 
@@ -53,6 +54,8 @@ let intervalId = setInterval(() => {
             if(selfIntersect()){
                 window.alert("Game over! Your score: " + snakeLength);
                 clearInterval(intervalId);
+                //updateScore();
+                //toDo
                 window.location.reload();
             }
 
@@ -77,6 +80,8 @@ let intervalId = setInterval(() => {
             //this is loss by leaving the game area
             window.alert("Game over! Your score: " + snakeLength );
             clearInterval(intervalId);
+            //toDo
+            // updateScore();
             window.location.reload();
         }
     }
@@ -164,11 +169,11 @@ function placeApple() {
     let randX = 0;
     let randY = 0;
     do{
+        appleOnSnake = false;
         randX = Math.floor(490*Math.random());
         randX = randX - (randX%10) + 5;
         randY = Math.floor(490*Math.random());
         randY = randY - (randY%10) + 5;
-
         snakeBody.forEach( (piece) => {
             appleOnSnake |= randX === piece.xPos && randY === piece.yPos;
         });
@@ -219,4 +224,9 @@ function selfIntersect() {
         isTouching |= headX === piece.xPos && headY === piece.yPos;
     });
     return isTouching;
+}
+
+
+function updateScore(){
+//toDO
 }
