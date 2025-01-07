@@ -3,6 +3,20 @@ h1 {
     text-align: center;
 }
 
+main {
+    display: flex;
+    flex-direction: row;
+    justify-content: center; /*for some reason this doesn't seem to work*/
+    align-items: center;
+}
+
+#rules {
+    height: 500px;
+    width: 200px;
+    text-align: center;
+    text-wrap: wrap;
+}
+
 #playArea {
     position: relative;
     height: 500px;
@@ -10,6 +24,14 @@ h1 {
     margin: auto;
     background-color: burlywood;
 }
+
+#score{
+    height: 500px;
+    width: 200px;
+    text-align: center;
+    text-wrap: wrap;
+}
+
 
 #snakeHead {
     position: absolute;
@@ -21,9 +43,14 @@ h1 {
     
 }
 
-
 #playArea div {
     transition: 0.2s;
+}
+
+.snakeBodyClass {
+    position: absolute;
+    height: 10px;
+    width: 10px;
 }
 
 .apple {

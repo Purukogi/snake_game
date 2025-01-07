@@ -137,14 +137,12 @@ function gameSetUp(event){
     for(let i = 0; i < snakeLength; i++){        
         /*creates the initial body pieces and adds it to the array of body pieces
         then sets style for the new piece
-        this can be rewritten by assiging a class and applying effects in stylesheet*/
+        might be able to replace the if statement with css as well*/
         let snakeBodyPiece = document.createElement("div");
         snakeBody[i] = {"xPos" : 245 - (i+1)*speedX, "yPos" : 245 - (i+1)*speedY, "piece" : snakeBodyPiece};
-        snakeBodyPiece.style.position = "absolute";
+        snakeBodyPiece.classList.add("snakeBodyClass")
         snakeBodyPiece.style.top = snakeBody[i].yPos+"px";
         snakeBodyPiece.style.left = snakeBody[i].xPos+"px";
-        snakeBodyPiece.style.height = "10px";
-        snakeBodyPiece.style.width = "10px";
         if(i%2 === 0){
             snakeBodyPiece.style.backgroundColor = "rgb(4, 207, 4)";
         }else{
@@ -196,12 +194,10 @@ function eatApple(){
     snakeBody.push(newPiece);
 
     /*sets style for the new piece
-    this can be rewritten by assiging a class and applying effects in stylesheet*/
-    newPieceDiv.style.position = "absolute";
+    might be able to replace the if statement with css as well*/
+    newPieceDiv.classList.add("snakeBodyClass");
     newPieceDiv.style.top = snakeBody[snakeLength].yPos+"px";
     newPieceDiv.style.left = snakeBody[snakeLength].xPos+"px";
-    newPieceDiv.style.height = "10px";
-    newPieceDiv.style.width = "10px";
     if(snakeLength%2 === 0){
         newPieceDiv.style.backgroundColor = "rgb(4, 207, 4)";
     }else{
