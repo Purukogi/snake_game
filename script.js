@@ -14,26 +14,15 @@ let speedX = 0;
 let speedY = 0;
 let snakeLength = 3;
 let gameStarted = false;
-let scoreTable = [];
+let scoreTable = [0, 0, 0, 0, 0];
+let scoreBoard_elem = document.getElementById("scoreBoard");
 const shadesOfGreen = ["#1E5631", "#A4DE02", "#76BA1B", "#4C9A2A", "#ACDF87", "#68BB59"];
 
 
 /*-----------------------------MAIN--------------------------*/
+updateScore();
 
-window.addEventListener("keydown", (event) => {
-    //if clause to avoid game over on non arrow keys pressed
-    if(event.keyCode >= 37 && event.keyCode <= 40){
-        //sets up the game for first user input
-        if(!gameStarted){
-            gameSetUp(event);
-            gameStarted = true;
-        }
-        /*once game has started the event listener just updates the moving direction
-        based on user input
-        */        
-        getDirection(event);
-    }
-});
+window.addEventListener("keydown", onKeyDown);
 
 /*makes the snake move by repeating instructions every 100ms*/
 let intervalId = setInterval(() => {
@@ -52,10 +41,9 @@ let intervalId = setInterval(() => {
 
             //this checks if the snake self intersects after moving the head
             if(selfIntersect()){
-                window.alert("Game over! Your score: " + snakeLength);
+                window.alert("Game over! Your score: " + (snakeLength - 3));
                 clearInterval(intervalId);
-                //updateScore();
-                //toDo
+                updateScore(snakeLength - 3);                
                 window.location.reload();
             }
 
@@ -78,10 +66,9 @@ let intervalId = setInterval(() => {
 
         }else{
             //this is loss by leaving the game area
-            window.alert("Game over! Your score: " + snakeLength );
+            window.alert("Game over! Your score: " + (snakeLength - 3) );
             clearInterval(intervalId);
-            //toDo
-            // updateScore();
+            updateScore(snakeLength - 3);
             window.location.reload();
         }
     }
@@ -92,6 +79,30 @@ let intervalId = setInterval(() => {
 
 
 /*--------------------------FUNCTIONS-----------------------------*/
+
+//dictates what happens when user presses a key
+function onKeyDown(event){
+    //temporarily disabling the user input to avoid sharp u-turns into yourself
+    window.removeEventListener("keydown", onKeyDown);
+
+    //if clause to avoid game over on non arrow keys pressed
+    if(event.keyCode >= 37 && event.keyCode <= 40){
+        //sets up the game for first user input
+        if(!gameStarted){
+            gameSetUp(event);
+            gameStarted = true;
+        }
+        /*once game has started the event listener just updates the moving direction
+        based on user input
+        */        
+        getDirection(event);
+    }
+
+    //restoring user's ability to input
+    setTimeout(() => {
+        window.addEventListener("keydown", onKeyDown);
+    }, 80);
+}
 
 /*sets snake moving direction depending on last key pressed
 the if clause prevents u-turning directly into the snake*/
@@ -160,6 +171,7 @@ function gameSetUp(event){
 
 }
 
+
 /*place an apple randomly on the play area*/
 function placeApple() {
     
@@ -227,6 +239,20 @@ function selfIntersect() {
 }
 
 
-function updateScore(){
-//toDO
+function updateScore(score){
+    if(localStorage.getItem("scoreTable") !== null){
+        scoreTable = localStorage.getItem("scoreTable");
+        scoreTable = JSON.parse(scoreTable);
+    }
+    scoreTable.push(score);
+    scoreTable = scoreTable.sort((a, b) => b - a);
+    if(scoreTable.length > 5){
+        scoreTable.pop();
+    }
+    scoreTable.forEach( score => {
+        let scoreToAdd = document.createElement("li");
+        scoreToAdd.innerText = score;
+        scoreBoard_elem.appendChild(scoreToAdd);
+    })
+    localStorage.setItem("scoreTable", JSON.stringify(scoreTable));
 }
