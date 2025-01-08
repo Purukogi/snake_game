@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
     <link rel="stylesheet" href="style.css">
+    <!--This style is a quickfix to swap between smooth transitions and classic snake
+    we just change its inner text when swapping transition styles-->
+    <style id="transitionStyle">
+        #playArea div {
+            transition: 0.2s;
+        }
+    </style>
     <script src="script.js" defer></script>
     <title>Document</title>
 </head>
@@ -19,18 +26,36 @@
                 <li>Collect the red apples to grow and increase your score.</li>
                 <li>Avoid the border and don't cross your body!</li>
             </ul>
+            <div id="transitionChoice">
+                Smooth transitions: 
+                <label for="smoothTransitionYes">Yes</label>
+                <input type="radio" name="smoothTransition" id="smoothTransitionYes" checked="checked">
+                <label for="smoothTransitionNo">No</label>
+                <input type="radio" name="smoothTransition" id="smoothTransitionNo">
+            </div>
+            <div id="speedChoice">
+                Speed increase:
+                <label for="speedIncreaseNo">No</label>
+                <input type="radio" name="speedIncrease" id="speedIncreaseNo" checked="checked">
+                <label for="smoothTransitionYes">Yes</label>
+                <input type="radio" name="speedIncrease" id="speedIncreaseYes">
+                <br>(speed increas will be added later)
+            </div>        
         </div>
-    
-        <div id="playArea">
-    
-            <div id="snakeHead">
-    
-            </div>
 
-            <div id="snakeBodyDiv">
-
-            </div>
+        
+        <div id="playAreaBorder">
+            <div id="playArea">
     
+                <div id="snakeHead">
+        
+                </div>
+    
+                <div id="snakeBodyDiv">
+    
+                </div>
+        
+            </div>
         </div>
     
         <div id="score">

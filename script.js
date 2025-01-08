@@ -7,8 +7,8 @@ let snakeBody = [];
 //stocks the x and y position and the div of the apple
 let appleCoord = {};
 //position of the snake head
-let headX = 245;
-let headY = 245;
+let headX = 240;
+let headY = 240;
 //moving direction
 let speedX = 0;
 let speedY = 0;
@@ -16,11 +16,22 @@ let snakeLength = 3;
 let gameStarted = false;
 let scoreTable = [0, 0, 0, 0, 0];
 let scoreBoard_elem = document.getElementById("scoreBoard");
+let smoothTransitionNo_elem = document.getElementById("smoothTransitionNo");
+let smoothTransitionYes_elem = document.getElementById("smoothTransitionYes");
 const shadesOfGreen = ["#1E5631", "#A4DE02", "#76BA1B", "#4C9A2A", "#ACDF87", "#68BB59"];
 
 
 /*-----------------------------MAIN--------------------------*/
 updateScore();
+setTransitionStyle();
+smoothTransitionYes_elem.addEventListener("click", () => {
+    localStorage.setItem("transitionStyle", "smooth");
+    setTransitionStyle();
+    });
+smoothTransitionNo_elem.addEventListener("click", () => {
+    localStorage.setItem("transitionStyle", "classic");
+    setTransitionStyle();
+    });
 
 window.addEventListener("keydown", onKeyDown);
 
@@ -101,7 +112,7 @@ function onKeyDown(event){
     //restoring user's ability to input
     setTimeout(() => {
         window.addEventListener("keydown", onKeyDown);
-    }, 80);
+    }, 70);
 }
 
 /*sets snake moving direction depending on last key pressed
@@ -155,7 +166,7 @@ function gameSetUp(event){
         then sets style for the new piece
         might be able to replace the if statement with css as well*/
         let snakeBodyPiece = document.createElement("div");
-        snakeBody[i] = {"xPos" : 245 - (i+1)*speedX, "yPos" : 245 - (i+1)*speedY, "piece" : snakeBodyPiece};
+        snakeBody[i] = {"xPos" : 240 - (i + 1)*speedX, "yPos" : 240 - (i + 1)*speedY, "piece" : snakeBodyPiece};
         snakeBodyPiece.classList.add("snakeBodyClass")
         snakeBodyPiece.style.top = snakeBody[i].yPos+"px";
         snakeBodyPiece.style.left = snakeBody[i].xPos+"px";
@@ -183,9 +194,9 @@ function placeApple() {
     do{
         appleOnSnake = false;
         randX = Math.floor(490*Math.random());
-        randX = randX - (randX%10) + 5;
+        randX = randX - (randX%10);
         randY = Math.floor(490*Math.random());
-        randY = randY - (randY%10) + 5;
+        randY = randY - (randY%10);
         snakeBody.forEach( (piece) => {
             appleOnSnake |= randX === piece.xPos && randY === piece.yPos;
         });
@@ -255,4 +266,20 @@ function updateScore(score){
         scoreBoard_elem.appendChild(scoreToAdd);
     })
     localStorage.setItem("scoreTable", JSON.stringify(scoreTable));
+}
+
+function setTransitionStyle(){
+    if(localStorage.getItem("transitionStyle") === null){
+        localStorage.setItem("transitionStyle", "smooth");
+    }else{
+        if(localStorage.getItem("transitionStyle") === "smooth"){
+            smoothTransitionYes_elem.checked = "checked";
+            let transitionStyle_elem = document.getElementById("transitionStyle");
+            transitionStyle_elem.innerText = "#playArea div {transition: 0.2s;}";
+        }else{
+            smoothTransitionNo_elem.checked = "checked";
+            let transitionStyle_elem = document.getElementById("transitionStyle");
+            transitionStyle_elem.innerText = "#playArea div {transition: 0s;}";
+        }
+    }
 }
