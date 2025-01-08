@@ -18,12 +18,17 @@ let scoreTable = [0, 0, 0, 0, 0];
 let scoreBoard_elem = document.getElementById("scoreBoard");
 let smoothTransitionNo_elem = document.getElementById("smoothTransitionNo");
 let smoothTransitionYes_elem = document.getElementById("smoothTransitionYes");
+let warpBorderNo_elem = document.getElementById("warpBorderNo");
+let warpBorderYes_elem = document.getElementById("warpBorderYes");
 const shadesOfGreen = ["#1E5631", "#A4DE02", "#76BA1B", "#4C9A2A", "#ACDF87", "#68BB59"];
 
 
 /*-----------------------------MAIN--------------------------*/
 updateScore();
+printScoreboard();
 setTransitionStyle();
+setWarpBorder();
+
 smoothTransitionYes_elem.addEventListener("click", () => {
     localStorage.setItem("transitionStyle", "smooth");
     setTransitionStyle();
@@ -32,56 +37,54 @@ smoothTransitionNo_elem.addEventListener("click", () => {
     localStorage.setItem("transitionStyle", "classic");
     setTransitionStyle();
     });
+warpBorderYes_elem.addEventListener("click", () => {
+    localStorage.setItem("warpBorder", "warp");
+    setWarpBorder();
+});
+warpBorderNo_elem.addEventListener("click", () => {
+    localStorage.setItem("warpBorder", "noWarp");
+    setWarpBorder();
+});
 
 window.addEventListener("keydown", onKeyDown);
 
 /*makes the snake move by repeating instructions every 100ms*/
 let intervalId = setInterval(() => {
     if(gameStarted){  
-        //if clause checks that the head is still inside play area      
-        if(!(headX < 0 || headX > 490 || headY < 0 || headY > 490)){
-            /*this moves the head
-            then moves each part of the body by saving the position of the previous piece
-            and moving the next one onto it*/
-            let tmpHeadX = headX;
-            let tmpHeadY = headY;
-            headX += speedX;
-            headY += speedY;
-            snakeHead_elem.style.left = headX + "px";
-            snakeHead_elem.style.top = headY + "px";
-
-            //this checks if the snake self intersects after moving the head
-            if(selfIntersect()){
-                window.alert("Game over! Your score: " + (snakeLength - 3));
-                clearInterval(intervalId);
-                updateScore(snakeLength - 3);                
-                window.location.reload();
-            }
-
-            //this moves the body       
-            for(let i = 0; i < snakeLength; i++){
-                let tmpX = snakeBody[i].xPos;
-                let tmpY = snakeBody[i].yPos;
-                snakeBody[i].xPos = tmpHeadX;
-                snakeBody[i].yPos = tmpHeadY;
-                tmpHeadX = tmpX;
-                tmpHeadY = tmpY;
-                snakeBody[i].piece.style.left = snakeBody[i].xPos + "px";
-                snakeBody[i].piece.style.top = snakeBody[i].yPos + "px";
-            }
-
-            //checks if the head is on an apple
-            if(headX === appleCoord.appleX && headY === appleCoord.appleY){
-                eatApple();
-            }
-
-        }else{
-            //this is loss by leaving the game area
-            window.alert("Game over! Your score: " + (snakeLength - 3) );
+        /*this moves the head
+        then moves each part of the body by saving the position of the previous piece
+        and moving the next one onto it*/
+        let tmpHeadX = headX;
+        let tmpHeadY = headY;
+        headX += speedX;
+        headY += speedY;
+        snakeHead_elem.style.left = headX + "px";
+        snakeHead_elem.style.top = headY + "px";
+        
+        if(selfIntersect() || isOutside()){
+            window.alert("Game over! Your score: " + (snakeLength - 3));
             clearInterval(intervalId);
-            updateScore(snakeLength - 3);
+            updateScore(snakeLength - 3);                
             window.location.reload();
         }
+
+        //this moves the body       
+        for(let i = 0; i < snakeLength; i++){
+            let tmpX = snakeBody[i].xPos;
+            let tmpY = snakeBody[i].yPos;
+            snakeBody[i].xPos = tmpHeadX;
+            snakeBody[i].yPos = tmpHeadY;
+            tmpHeadX = tmpX;
+            tmpHeadY = tmpY;
+            snakeBody[i].piece.style.left = snakeBody[i].xPos + "px";
+            snakeBody[i].piece.style.top = snakeBody[i].yPos + "px";
+        }
+
+        //checks if the head is on an apple
+        if(headX === appleCoord.appleX && headY === appleCoord.appleY){
+            eatApple();
+        }
+
     }
 }, 100);
 
@@ -249,6 +252,10 @@ function selfIntersect() {
     return isTouching;
 }
 
+function isOutside(){
+    return (headX < 0 || headX > 490 || headY < 0 || headY > 490);
+}
+
 
 function updateScore(score){
     if(localStorage.getItem("scoreTable") !== null){
@@ -260,17 +267,22 @@ function updateScore(score){
     if(scoreTable.length > 5){
         scoreTable.pop();
     }
+    localStorage.setItem("scoreTable", JSON.stringify(scoreTable));
+}
+
+/*we separate print scoreboard and update score to avoid flashing when updating scores
+*/
+function printScoreboard(){
     scoreTable.forEach( score => {
         let scoreToAdd = document.createElement("li");
         scoreToAdd.innerText = score;
         scoreBoard_elem.appendChild(scoreToAdd);
     })
-    localStorage.setItem("scoreTable", JSON.stringify(scoreTable));
 }
 
 function setTransitionStyle(){
     if(localStorage.getItem("transitionStyle") === null){
-        localStorage.setItem("transitionStyle", "smooth");
+        localStorage.setItem("transitionStyle", "classic");
     }else{
         if(localStorage.getItem("transitionStyle") === "smooth"){
             smoothTransitionYes_elem.checked = "checked";
@@ -280,6 +292,18 @@ function setTransitionStyle(){
             smoothTransitionNo_elem.checked = "checked";
             let transitionStyle_elem = document.getElementById("transitionStyle");
             transitionStyle_elem.innerText = "#playArea div {transition: 0s;}";
+        }
+    }
+}
+
+function setWarpBorder() {
+    if(localStorage.getItem("warpBorder") === null){
+        localStorage.setItem("warpBorder", "noWarp");
+    }else{
+        if(localStorage.getItem("warpBorder") === "warp"){
+            warpBorderYes_elem.checked = "checked";
+        }else{
+            warpBorderNo_elem.checked = "checked";            
         }
     }
 }
