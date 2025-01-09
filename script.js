@@ -16,10 +16,13 @@ let snakeLength = 3;
 let gameStarted = false;
 let scoreTable = [0, 0, 0, 0, 0];
 let scoreBoard_elem = document.getElementById("scoreBoard");
+let currentScore_elem = document.getElementById("currentScore");
 let smoothTransitionNo_elem = document.getElementById("smoothTransitionNo");
 let smoothTransitionYes_elem = document.getElementById("smoothTransitionYes");
 let warpBorderNo_elem = document.getElementById("warpBorderNo");
 let warpBorderYes_elem = document.getElementById("warpBorderYes");
+let borderRules_elem = document.getElementById("borderRules");
+let playAreaBorder_elem = document.getElementById("playAreaBorder");
 const shadesOfGreen = ["#1E5631", "#A4DE02", "#76BA1B", "#4C9A2A", "#ACDF87", "#68BB59"];
 
 
@@ -57,16 +60,22 @@ let intervalId = setInterval(() => {
         let tmpHeadX = headX;
         let tmpHeadY = headY;
         headX += speedX;
-        headY += speedY;
+        headY += speedY;        
+        
+        if(isOutside()) {
+            if(localStorage.getItem("warpBorder") === "noWarp"){
+                gameOver();
+            }else{
+                console.log("head pre warp" + headX);
+                console.log("body pre warp" + tmpHeadX);
+                warpHead();
+                
+            }
+        }
         snakeHead_elem.style.left = headX + "px";
         snakeHead_elem.style.top = headY + "px";
         
-        if(selfIntersect() || isOutside()){
-            window.alert("Game over! Your score: " + (snakeLength - 3));
-            clearInterval(intervalId);
-            updateScore(snakeLength - 3);                
-            window.location.reload();
-        }
+        
 
         //this moves the body       
         for(let i = 0; i < snakeLength; i++){
@@ -78,6 +87,10 @@ let intervalId = setInterval(() => {
             tmpHeadY = tmpY;
             snakeBody[i].piece.style.left = snakeBody[i].xPos + "px";
             snakeBody[i].piece.style.top = snakeBody[i].yPos + "px";
+        }
+
+        if(selfIntersect()){            
+            gameOver();
         }
 
         //checks if the head is on an apple
@@ -239,6 +252,7 @@ function eatApple(){
 
     snakeLength++;
     appleCoord.apple.style.display = "none";
+    currentScore_elem.innerText = snakeLength - 3;
     placeApple();
 }
 
@@ -302,8 +316,34 @@ function setWarpBorder() {
     }else{
         if(localStorage.getItem("warpBorder") === "warp"){
             warpBorderYes_elem.checked = "checked";
+            borderRules_elem.innerText = "Crossing a border teleports you to the ther side.";
+            playAreaBorder_elem.style.border = "10px dashed brown";
         }else{
-            warpBorderNo_elem.checked = "checked";            
+            warpBorderNo_elem.checked = "checked";
+            borderRules_elem.innerText = "You lose if you touch the border.";       
+            playAreaBorder_elem.style.border = "10px solid brown";    
         }
+    }
+}
+
+function gameOver() {
+    window.alert("Game over! Your score: " + (snakeLength - 3));
+    clearInterval(intervalId);
+    updateScore(snakeLength - 3);                
+    window.location.reload();
+}
+
+function warpHead(){
+    if(headX < 0){
+        headX = 490;
+    }
+    if(headX > 490){
+        headX = 0;
+    }
+    if(headY < 0 ){
+        headY = 490;
+    }
+    if(headY > 490){
+        headY = 0;
     }
 }

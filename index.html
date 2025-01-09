@@ -24,7 +24,8 @@
             <ul>
                 <li>Use the arrow keys to move your snake.</li>
                 <li>Collect the red apples to grow and increase your score.</li>
-                <li>Avoid the border and don't cross your body!</li>
+                <li id="borderRules">You lose if you touch the border.</li>
+                <li>You lose if you cross your tail.</li>
             </ul>
             <div id="transitionChoice">
                 Smooth transitions: 
@@ -39,7 +40,7 @@
                 <input type="radio" name="warpBorder" id="warpBorderNo" checked="checked">
                 <label for="warpBorderYes">Yes</label>
                 <input type="radio" name="warpBorder" id="warpBorderYes">
-                <br>(warp will be added later)
+                <br>(warp does not work well with smooth transitions)
             </div>
             <div id="speedChoice">
                 Speed increase:
@@ -47,7 +48,7 @@
                 <input type="radio" name="speedIncrease" id="speedIncreaseNo" checked="checked">
                 <label for="smoothTransitionYes">Yes</label>
                 <input type="radio" name="speedIncrease" id="speedIncreaseYes">
-                <br>(speed increas will be added later)
+                <br>(speed increase will be added later)
             </div>        
         </div>
 
@@ -71,6 +72,7 @@
             <ol id="scoreBoard">
 
             </ol>
+            <p> Current score: <span id="currentScore">0</span></p>
         </div>
     </main>
     
