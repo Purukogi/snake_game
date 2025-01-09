@@ -260,9 +260,7 @@ function eatApple(){
     appleCoord.apple.style.display = "none";
     currentScore_elem.innerText = snakeLength - 3;
     placeApple();
-	snakeLength++;
-	appleCoord.apple.style.display = "none";
-	placeApple();
+	
 }
 
 /*checks if the head ever touches the body*/
@@ -325,11 +323,11 @@ function setWarpBorder() {
         if(localStorage.getItem("warpBorder") === "warp"){
             warpBorderYes_elem.checked = "checked";
             borderRules_elem.innerText = "Crossing a border teleports you to the ther side.";
-            playAreaBorder_elem.style.border = "10px dashed brown";
+            playAreaBorder_elem.style.border = "5px dashed brown";
         }else{
             warpBorderNo_elem.checked = "checked";
             borderRules_elem.innerText = "You lose if you touch the border.";       
-            playAreaBorder_elem.style.border = "10px solid brown";    
+            playAreaBorder_elem.style.border = "5px solid brown";    
         }
     }
 }
