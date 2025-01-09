@@ -23,8 +23,18 @@ let warpBorderNo_elem = document.getElementById("warpBorderNo");
 let warpBorderYes_elem = document.getElementById("warpBorderYes");
 let borderRules_elem = document.getElementById("borderRules");
 let playAreaBorder_elem = document.getElementById("playAreaBorder");
-const shadesOfGreen = ["#1E5631", "#A4DE02", "#76BA1B", "#4C9A2A", "#ACDF87", "#68BB59"];
 
+
+// -- title zone
+const shadesOfGreen = [
+	"#1E5631",
+	 "#A4DE02",
+	 "#76BA1B",
+	 "#4C9A2A",
+	 "#ACDF87",
+	 "#68BB59"
+];
+const gameTitle = document.getElementsByTagName("h1");
 
 /*-----------------------------MAIN--------------------------*/
 updateScore();
@@ -100,10 +110,7 @@ let intervalId = setInterval(() => {
 
     }
 }, 100);
-
-
-
-
+gameTitle.forEach(shuffleGreen());
 
 /*--------------------------FUNCTIONS-----------------------------*/
 
@@ -194,8 +201,7 @@ function gameSetUp(event){
         playArea_elem.appendChild(snakeBodyPiece);
     }
 
-    placeApple();
-
+	placeApple();
 }
 
 
@@ -248,12 +254,15 @@ function eatApple(){
         newPieceDiv.style.backgroundColor = "rgb(0,120,0)";
     }     
 
-    playArea_elem.appendChild(newPieceDiv);   
+	playArea_elem.appendChild(newPieceDiv);
 
     snakeLength++;
     appleCoord.apple.style.display = "none";
     currentScore_elem.innerText = snakeLength - 3;
     placeApple();
+	snakeLength++;
+	appleCoord.apple.style.display = "none";
+	placeApple();
 }
 
 /*checks if the head ever touches the body*/
@@ -269,7 +278,6 @@ function selfIntersect() {
 function isOutside(){
     return (headX < 0 || headX > 490 || headY < 0 || headY > 490);
 }
-
 
 function updateScore(score){
     if(localStorage.getItem("scoreTable") !== null){
@@ -346,4 +354,14 @@ function warpHead(){
     if(headY > 490){
         headY = 0;
     }
+}
+/* -----------------------------
+   -      STYLE FUNCTIONS      -
+   ----------------------------- */
+//TODO : write function for letter going to green
+function shuffleTitleGreen(title) {
+	pass;
+}
+function redTitle() {
+	pass;
 }
