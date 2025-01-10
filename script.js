@@ -17,12 +17,7 @@ let gameStarted = false;
 let scoreTable = [0, 0, 0, 0, 0];
 let scoreBoard_elem = document.getElementById("scoreBoard");
 let currentScore_elem = document.getElementById("currentScore");
-//better buttons get goes here
 let onOffBottomDiv_elems = document.getElementsByClassName("onOffBottomDiv");
-let smoothTransitionNo_elem = document.getElementById("smoothTransitionNo");
-let smoothTransitionYes_elem = document.getElementById("smoothTransitionYes");
-let warpBorderNo_elem = document.getElementById("warpBorderNo");
-let warpBorderYes_elem = document.getElementById("warpBorderYes");
 let borderRules_elem = document.getElementById("borderRules");
 let playAreaBorder_elem = document.getElementById("playAreaBorder");
 
@@ -40,34 +35,13 @@ const gameTitle = document.getElementsByTagName("h1");
 
 /*-----------------------------MAIN--------------------------*/
 
-//events on better buttons code here
+
 addButtonsEvent();
 setButtonStatus();
-
-
 updateScore();
 printScoreboard();
 setTransitionStyle();
 setWarpBorder();
-
-
-
-smoothTransitionYes_elem.addEventListener("click", () => {
-    localStorage.setItem("transitionStyle", "smooth");
-    setTransitionStyle();
-    });
-smoothTransitionNo_elem.addEventListener("click", () => {
-    localStorage.setItem("transitionStyle", "classic");
-    setTransitionStyle();
-    });
-warpBorderYes_elem.addEventListener("click", () => {
-    localStorage.setItem("warpBorder", "warp");
-    setWarpBorder();
-});
-warpBorderNo_elem.addEventListener("click", () => {
-    localStorage.setItem("warpBorder", "noWarp");
-    setWarpBorder();
-});
 
 window.addEventListener("keydown", onKeyDown);
 
@@ -315,11 +289,9 @@ function setTransitionStyle(){
         localStorage.setItem("transitionStyle", "classic");
     }else{
         if(localStorage.getItem("transitionStyle") === "smooth"){
-            smoothTransitionYes_elem.checked = "checked";
             let transitionStyle_elem = document.getElementById("transitionStyle");
             transitionStyle_elem.innerText = "#playArea div {transition: 0.2s;}";
         }else{
-            smoothTransitionNo_elem.checked = "checked";
             let transitionStyle_elem = document.getElementById("transitionStyle");
             transitionStyle_elem.innerText = "#playArea div {transition: 0s;}";
         }
@@ -331,11 +303,9 @@ function setWarpBorder() {
         localStorage.setItem("warpBorder", "noWarp");
     }else{
         if(localStorage.getItem("warpBorder") === "warp"){
-            warpBorderYes_elem.checked = "checked";
             borderRules_elem.innerText = "Crossing a border teleports you to the ther side.";
             playAreaBorder_elem.style.border = "5px dashed brown";
         }else{
-            warpBorderNo_elem.checked = "checked";
             borderRules_elem.innerText = "You lose if you touch the border.";       
             playAreaBorder_elem.style.border = "5px solid brown";    
         }

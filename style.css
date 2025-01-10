@@ -21,6 +21,15 @@ main {
     text-align: left;
 }
 
+#transitionChoice, #borderChoice, #speedChoice {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
 /*Begining of on-off button workspace*/
 .onOffCheckBox {
     opacity: 0;
