@@ -21,6 +21,33 @@ main {
     text-align: left;
 }
 
+/*Begining of on-off button workspace*/
+.onOffCheckBox {
+    opacity: 0;
+    height: 0px;
+    width: 0px;
+}
+
+.onOffBottomDiv {
+    position: relative;
+    width: 35px;
+    height: 20px;
+    background-color: gray;
+    border-radius: 20px;
+}
+
+.onOffTopDiv {
+    position: absolute;
+    top: 1px;
+    width: 18px;
+    height:18px;
+    background-color: lightgrey;
+    border-radius: 18px;
+    transition: 0.2s;
+}
+
+/*End of on-off button workspace */
+
 #playAreaBorder{
     height: 500px;
     width: 500px;

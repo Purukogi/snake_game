@@ -17,6 +17,8 @@ let gameStarted = false;
 let scoreTable = [0, 0, 0, 0, 0];
 let scoreBoard_elem = document.getElementById("scoreBoard");
 let currentScore_elem = document.getElementById("currentScore");
+//better buttons get goes here
+let onOffBottomDiv_elems = document.getElementsByClassName("onOffBottomDiv");
 let smoothTransitionNo_elem = document.getElementById("smoothTransitionNo");
 let smoothTransitionYes_elem = document.getElementById("smoothTransitionYes");
 let warpBorderNo_elem = document.getElementById("warpBorderNo");
@@ -37,10 +39,18 @@ const shadesOfGreen = [
 const gameTitle = document.getElementsByTagName("h1");
 
 /*-----------------------------MAIN--------------------------*/
+
+//events on better buttons code here
+addButtonsEvent();
+setButtonStatus();
+
+
 updateScore();
 printScoreboard();
 setTransitionStyle();
 setWarpBorder();
+
+
 
 smoothTransitionYes_elem.addEventListener("click", () => {
     localStorage.setItem("transitionStyle", "smooth");
@@ -353,6 +363,67 @@ function warpHead(){
         headY = 0;
     }
 }
+
+//functions for better buttons go here
+
+function addButtonsEvent(){
+    for(let i = 0; i < onOffBottomDiv_elems.length; i ++){
+        onOffBottomDiv_elems.item(i).addEventListener("click", () =>{ 
+            swapButtonStatus(onOffBottomDiv_elems.item(i));
+            updateUserPreference(onOffBottomDiv_elems.item(i));
+        });
+    }    
+}
+
+function swapButtonStatus(element) {
+    if(element.lastElementChild.style.left === "1px"){
+        element.lastElementChild.style.left = "16px";
+        element.style.backgroundColor = "green";
+    }else{
+        element.lastElementChild.style.left = "1px";
+        element.style.backgroundColor = "grey";
+    }
+    
+}
+
+function setButtonStatus(){
+    if (localStorage.getItem("transitionStyle") === "smooth") {
+        swapButtonStatus(onOffBottomDiv_elems.item(0));        
+    }
+    if (localStorage.getItem("warpBorder") === "warp") {
+        swapButtonStatus(onOffBottomDiv_elems.item(1));        
+    }
+    //add speed when implemented
+}
+
+function updateUserPreference(element){
+    switch (element.id) {
+        case "offSwitchTransition":
+            if (localStorage.getItem("transitionStyle") === "smooth") {
+                localStorage.setItem("transitionStyle", "classic");        
+            }else{
+                localStorage.setItem("transitionStyle", "smooth");
+            }
+            setTransitionStyle();
+            break;
+        case "offSwitchWarp":
+            if (localStorage.getItem("warpBorder") === "warp") {
+                localStorage.setItem("warpBorder", "noWarp");        
+            }else{
+                localStorage.setItem("warpBorder", "warp");
+            }
+            setWarpBorder();
+            break;
+        //add case speed when implemented
+        default:
+            console.log("something went wrong updateUserPreference");            
+            break;
+    }
+}
+
+//stop of better buttons functions
+
+
 /* -----------------------------
    -      STYLE FUNCTIONS      -
    ----------------------------- */
