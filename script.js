@@ -12,6 +12,7 @@ let headY = 240;
 //moving direction
 let speedX = 0;
 let speedY = 0;
+let speedIncrease = 0;
 let snakeLength = 3;
 let gameStarted = false;
 let scoreTable = [0, 0, 0, 0, 0];
@@ -19,6 +20,7 @@ let scoreBoard_elem = document.getElementById("scoreBoard");
 let currentScore_elem = document.getElementById("currentScore");
 let onOffBottomDiv_elems = document.getElementsByClassName("onOffBottomDiv");
 let borderRules_elem = document.getElementById("borderRules");
+let speedRules_elem = document.getElementById("speedRules");
 let playAreaBorder_elem = document.getElementById("playAreaBorder");
 
 
@@ -38,6 +40,7 @@ const gameTitle = document.getElementsByTagName("h1");
 
 addButtonsEvent();
 setButtonStatus();
+setSpeedRules();
 updateScore();
 printScoreboard();
 setTransitionStyle();
@@ -45,55 +48,9 @@ setWarpBorder();
 
 window.addEventListener("keydown", onKeyDown);
 
-/*makes the snake move by repeating instructions every 100ms*/
-let intervalId = setInterval(() => {
-    if(gameStarted){  
-        /*this moves the head
-        then moves each part of the body by saving the position of the previous piece
-        and moving the next one onto it*/
-        let tmpHeadX = headX;
-        let tmpHeadY = headY;
-        headX += speedX;
-        headY += speedY;        
-        
-        if(isOutside()) {
-            if(localStorage.getItem("warpBorder") === "noWarp"){
-                gameOver();
-            }else{
-                console.log("head pre warp" + headX);
-                console.log("body pre warp" + tmpHeadX);
-                warpHead();
-                
-            }
-        }
-        snakeHead_elem.style.left = headX + "px";
-        snakeHead_elem.style.top = headY + "px";
-        
-        
-
-        //this moves the body       
-        for(let i = 0; i < snakeLength; i++){
-            let tmpX = snakeBody[i].xPos;
-            let tmpY = snakeBody[i].yPos;
-            snakeBody[i].xPos = tmpHeadX;
-            snakeBody[i].yPos = tmpHeadY;
-            tmpHeadX = tmpX;
-            tmpHeadY = tmpY;
-            snakeBody[i].piece.style.left = snakeBody[i].xPos + "px";
-            snakeBody[i].piece.style.top = snakeBody[i].yPos + "px";
-        }
-
-        if(selfIntersect()){            
-            gameOver();
-        }
-
-        //checks if the head is on an apple
-        if(headX === appleCoord.appleX && headY === appleCoord.appleY){
-            eatApple();
-        }
-
-    }
-}, 100);
+/*gameplay loop
+makes snake moves and checks for game events*/
+let intervalId = setInterval(gameLoop, 100);
 gameTitle.forEach(shuffleGreen());
 
 /*--------------------------FUNCTIONS-----------------------------*/
@@ -116,10 +73,12 @@ function onKeyDown(event){
         getDirection(event);
     }
 
-    //restoring user's ability to input
+    /*restoring user's ability to input
+    restoring speed is based on gamespeed
+    */
     setTimeout(() => {
         window.addEventListener("keydown", onKeyDown);
-    }, 70);
+    }, Math.max((100 - speedIncrease)/2, 0));
 }
 
 /*sets snake moving direction depending on last key pressed
@@ -188,8 +147,58 @@ function gameSetUp(event){
 	placeApple();
 }
 
+function gameLoop() {
+    if(gameStarted){  
+        /*this moves the head
+        then moves each part of the body by saving the position of the previous piece
+        and moving the next one onto it*/
+        let tmpHeadX = headX;
+        let tmpHeadY = headY;
+        headX += speedX;
+        headY += speedY;        
+        
+        if(isOutside()) {
+            if(localStorage.getItem("warpBorder") === "noWarp"){
+                gameOver();
+            }else{
+                warpHead();                
+            }
+        }
+        snakeHead_elem.style.left = headX + "px";
+        snakeHead_elem.style.top = headY + "px";
+        
+        
 
-/*place an apple randomly on the play area*/
+        //this moves the body       
+        for(let i = 0; i < snakeLength; i++){
+            let tmpX = snakeBody[i].xPos;
+            let tmpY = snakeBody[i].yPos;
+            snakeBody[i].xPos = tmpHeadX;
+            snakeBody[i].yPos = tmpHeadY;
+            tmpHeadX = tmpX;
+            tmpHeadY = tmpY;
+            snakeBody[i].piece.style.left = snakeBody[i].xPos + "px";
+            snakeBody[i].piece.style.top = snakeBody[i].yPos + "px";
+        }
+
+        if(selfIntersect()){            
+            gameOver();
+        }
+
+        if(headX === appleCoord.appleX && headY === appleCoord.appleY){
+            eatApple();
+            if(localStorage.getItem("speedIncrease") === "increase"){
+                if(snakeLength % 25 === 3) {
+                    increaseSpeed();            
+                }
+            }
+        }
+
+        
+    }
+}
+
+
 function placeApple() {
     
     /*this checks that the apple does not spawn on the snake
@@ -216,8 +225,6 @@ function placeApple() {
     playArea_elem.appendChild(appleCoord.apple);
 }
 
-/*when the head touches an apple, adds another piece to the body
-then increases the length of the snake and places another apple*/
 function eatApple(){
 
     /*creates the new piece and adds it to the array of body pieces*/
@@ -247,7 +254,7 @@ function eatApple(){
 	
 }
 
-/*checks if the head ever touches the body*/
+
 function selfIntersect() {
 
     let isTouching = false;
@@ -259,6 +266,12 @@ function selfIntersect() {
 
 function isOutside(){
     return (headX < 0 || headX > 490 || headY < 0 || headY > 490);
+}
+
+function increaseSpeed() {
+    speedIncrease += 10;    
+    clearInterval(intervalId);
+    intervalId = setInterval(gameLoop, Math.max((100 - speedIncrease), 0));
 }
 
 function updateScore(score){
@@ -287,13 +300,14 @@ function printScoreboard(){
 function setTransitionStyle(){
     if(localStorage.getItem("transitionStyle") === null){
         localStorage.setItem("transitionStyle", "classic");
+        playArea_elem.classList.add("classicTransition");
     }else{
         if(localStorage.getItem("transitionStyle") === "smooth"){
-            let transitionStyle_elem = document.getElementById("transitionStyle");
-            transitionStyle_elem.innerText = "#playArea div {transition: 0.2s;}";
+            playArea_elem.classList.add("smoothTransition");
+            playArea_elem.classList.remove("classicTransition");            
         }else{
-            let transitionStyle_elem = document.getElementById("transitionStyle");
-            transitionStyle_elem.innerText = "#playArea div {transition: 0s;}";
+            playArea_elem.classList.add("classicTransition");
+            playArea_elem.classList.remove("smoothTransition"); 
         }
     }
 }
@@ -303,7 +317,7 @@ function setWarpBorder() {
         localStorage.setItem("warpBorder", "noWarp");
     }else{
         if(localStorage.getItem("warpBorder") === "warp"){
-            borderRules_elem.innerText = "Crossing a border teleports you to the ther side.";
+            borderRules_elem.innerText = "Crossing a border teleports you to the other side.";
             playAreaBorder_elem.style.border = "5px dashed brown";
         }else{
             borderRules_elem.innerText = "You lose if you touch the border.";       
@@ -312,9 +326,21 @@ function setWarpBorder() {
     }
 }
 
+function setSpeedRules() {
+    if(localStorage.getItem("speedIncrease") === null){
+        localStorage.setItem("speedIncrease", "noIncrease");
+    }else{
+        if(localStorage.getItem("speedIncrease") === "increase"){
+            speedRules_elem.innerText = "Speed increases every 25 apples.";
+        }else{
+            speedRules_elem.innerText = "Speed stays the same during the game.";     
+        }
+    }
+}
+
 function gameOver() {
-    window.alert("Game over! Your score: " + (snakeLength - 3));
     clearInterval(intervalId);
+    window.alert("Game over! Your score: " + (snakeLength - 3));    
     updateScore(snakeLength - 3);                
     window.location.reload();
 }
@@ -333,8 +359,6 @@ function warpHead(){
         headY = 0;
     }
 }
-
-//functions for better buttons go here
 
 function addButtonsEvent(){
     for(let i = 0; i < onOffBottomDiv_elems.length; i ++){
@@ -364,7 +388,9 @@ function setButtonStatus(){
     if (localStorage.getItem("warpBorder") === "warp") {
         swapButtonStatus(onOffBottomDiv_elems.item(1));        
     }
-    //add speed when implemented
+    if (localStorage.getItem("speedIncrease") === "increase") {
+        swapButtonStatus(onOffBottomDiv_elems.item(2));        
+    }
 }
 
 function updateUserPreference(element){
@@ -385,14 +411,19 @@ function updateUserPreference(element){
             }
             setWarpBorder();
             break;
-        //add case speed when implemented
+        case "offSwitchSpeed":
+            if (localStorage.getItem("speedIncrease") === "increase") {
+                localStorage.setItem("speedIncrease", "noIncrease");                      
+            }else{
+                localStorage.setItem("speedIncrease", "increase");                
+            }
+            setSpeedRules();
+            break;     
         default:
             console.log("something went wrong updateUserPreference");            
             break;
     }
 }
-
-//stop of better buttons functions
 
 
 /* -----------------------------
