@@ -71,6 +71,14 @@ h1 {
     background-color: burlywood;
 }
 
+.smoothTransition div {
+    transition: 0.2s;
+}
+
+.classicTransition div {
+    transition: 0s;
+}
+
 #score{
     min-width: 100px;
     text-align: center;
