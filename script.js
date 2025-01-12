@@ -242,7 +242,7 @@ function eatApple(){
 
     snakeLength++;
     appleCoord.apple.style.display = "none";
-    currentScore_elem.innerText = snakeLength - 3;
+    currentScore_elem.lastElementChild.innerText = snakeLength - 3;
     placeApple();
 	
 }
@@ -345,15 +345,16 @@ function addButtonsEvent(){
     }    
 }
 
-function swapButtonStatus(element) {
-    if(element.lastElementChild.style.left === "1px"){
+function swapButtonStatus(element) {    
+    if(element.classList.contains("buttonOff")){
+        element.classList.remove("buttonOff");
         element.lastElementChild.style.left = "16px";
         element.style.backgroundColor = "green";
     }else{
+        element.classList.add("buttonOff");
         element.lastElementChild.style.left = "1px";
         element.style.backgroundColor = "grey";
-    }
-    
+    }    
 }
 
 function setButtonStatus(){

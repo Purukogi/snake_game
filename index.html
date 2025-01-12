@@ -13,67 +13,79 @@
         }
     </style>
     <script src="script.js" defer></script>
-    <title>Document</title>
+    <title>Snake Game</title>
 </head>
 <body>
-    <h1>Snake Game</h1>
 
+    <header>
+        <h1>Snake Game</h1>
+    </header>
+    
     <main>
-        <div id="rules">
-            <h2>How to play</h2>
-            <ul>
-                <li>Use the arrow keys to move your snake.</li>
-                <li>Collect the red apples to grow and increase your score.</li>
-                <li id="borderRules">You lose if you touch the border.</li>
-                <li>You lose if you cross your tail.</li>
-            </ul>
-            <div id="transitionChoice">
-                <div>Smooth transitions:</div>                                            
-                <div class="onOffBottomDiv" id="offSwitchTransition">
-                    <div class="onOffTopDiv" style="left: 1px"></div>
-                    <!--we put style in the html as a quick fix to swap button status-->
-                </div>               
-            </div>
-            <div id="borderChoice">
-                <div>Warping borders:</div> 
-                <div class="onOffBottomDiv" id="offSwitchWarp">                    
-                    <div class="onOffTopDiv" style="left: 1px"></div>
+        <div id="container">
+            <div id="rules">
+                <h2>How to play</h2>
+                <ul>
+                    <li>Use the arrow keys to move your snake.</li>
+                    <li>Collect the red apples to grow and increase your score.</li>
+                    <li id="borderRules">You lose if you touch the border.</li>
+                    <li>You lose if you cross your tail.</li>
+                </ul>
+                <h2>Settings</h2>
+                <div id="transitionChoice">
+                    <div>Smooth transitions:</div>                                            
+                    <div class="onOffBottomDiv buttonOff" id="offSwitchTransition">
+                        <div class="onOffTopDiv"></div>                    
+                    </div>               
                 </div>
-                
-            </div>
-            <div id="speedChoice">
-                <div>Speed increase:</div>
-                <div class="onOffBottomDiv" id="offSwitchSpeed">
-                    <input type="checkbox" name="speedCheckBox" class="onOffCheckBox" id="speedCheckBox">
-                    <div class="onOffTopDiv" style="left: 1px"></div>
-                </div>                
-            </div>
-            <p>Speed increase to be added soon</p>     
-        </div>
-
-        
-        <div id="playAreaBorder"> <!-- where the magic happens -->
-            <div id="playArea">
-    
-                <div id="snakeHead">
-        
+                <div id="borderChoice">
+                    <div>Warping borders:</div> 
+                    <div class="onOffBottomDiv buttonOff" id="offSwitchWarp" class="buttonOff">                    
+                        <div class="onOffTopDiv" ></div>
+                    </div>
+                    
                 </div>
-    
-                <div id="snakeBodyDiv">
-    
+                <div id="speedChoice">
+                    <div>Speed increase:</div>
+                    <div class="onOffBottomDiv buttonOff" id="offSwitchSpeed" class="buttonOff">
+                        <input type="checkbox" name="speedCheckBox" class="onOffCheckBox" id="speedCheckBox">
+                        <div class="onOffTopDiv"></div>
+                    </div>                
                 </div>
-        
+                <p>Speed increase to be added soon</p>     
             </div>
-        </div>
     
-        <div id="score">
-            <h2>High scores for today</h2>
-            <ol id="scoreBoard">
-
-            </ol>
-            <p> Current score: <span id="currentScore">0</span></p>
+            
+            <div id="playAreaBorder"> <!-- where the magic happens -->
+                <div id="playArea">
+        
+                    <div id="snakeHead">
+            
+                    </div>
+        
+                    <div id="snakeBodyDiv">
+        
+                    </div>
+            
+                </div>
+            </div>
+        
+            <div id="score">
+                <h2>High scores for today</h2>
+                    <div id = scoreBoardContainer>
+                        <ol id="scoreBoard">
+    
+                        </ol>
+                    </div>
+                <h3 id="currentScore"> Current score: <span >0</span></h3>
+            </div>
         </div>
     </main>
+    
+
+    <footer>
+        <p> Made by Purukogi and Deb in 2025</p>
+    </footer>
     
 </body>
 </html>

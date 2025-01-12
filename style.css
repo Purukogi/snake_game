@@ -3,16 +3,17 @@ h1 {
     text-align: center;
 }
 
-main {
+#container {
+    margin: auto;
+    max-width: 1200px;
     display: flex;
     flex-direction: row;
-    justify-content: center; /*for some reason this doesn't seem to work*/
+    justify-content: space-between;
     align-items: center;
 }
 
 #rules {
-    height: 500px;
-    width: 250px;
+    min-width: 200px;
     text-align: center;
     text-wrap: wrap;
 }
@@ -30,7 +31,6 @@ main {
     margin-bottom: 10px;
 }
 
-/*Begining of on-off button workspace*/
 .onOffCheckBox {
     opacity: 0;
     height: 0px;
@@ -48,6 +48,7 @@ main {
 .onOffTopDiv {
     position: absolute;
     top: 1px;
+    left: 1px;
     width: 18px;
     height:18px;
     background-color: lightgrey;
@@ -55,12 +56,9 @@ main {
     transition: 0.2s;
 }
 
-/*End of on-off button workspace */
-
 #playAreaBorder{
     height: 500px;
     width: 500px;
-    margin: auto;
     z-index: 2;
     border: 5px solid brown;
 }
@@ -74,12 +72,15 @@ main {
 }
 
 #score{
-    height: 500px;
-    width: 200px;
+    min-width: 100px;
     text-align: center;
     text-wrap: wrap;
 }
 
+#scoreBoardContainer {
+    max-width: 75px;
+    margin: auto;
+}
 
 #snakeHead {
     position: absolute;
@@ -103,4 +104,9 @@ main {
     width: 10px;
     background-color: red;
     border-radius: 50%;
+}
+
+footer {
+    text-align: center;
+    font-style: italic;
 }
